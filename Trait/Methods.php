@@ -1,5 +1,4 @@
 <?php
-
 trait Methods
 {
     private static string $url = 'https://api.telegram.org/bot6431848989:AAHrAikvk5GyFDRHDLq7pcN6Ig_lRvQ-ngc';
