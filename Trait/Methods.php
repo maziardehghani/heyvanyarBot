@@ -17,9 +17,9 @@ trait Methods
 
     }
 
-    public static function copy($chatID, $from_chat_id,$message_id,$caption): void
+    public static function copy($chatID, $from_chat_id,$message_id,$caption)
     {
-        file_get_contents(self::$url . "/copyMessage?chat_id=$chatID&from_chat_id=$from_chat_id&message_id=$message_id&protect_content=true&caption=$caption");
+        return file_get_contents(self::$url . "/copyMessage?chat_id=$chatID&from_chat_id=$from_chat_id&message_id=$message_id&protect_content=true&caption=$caption");
 
     }
 
@@ -29,9 +29,9 @@ trait Methods
 
     }
 
-    public static function editCaption($chatID,$message_id,$caption)
+    public static function editCaption($chatID,$message_id,$caption): void
     {
-       return file_get_contents(self::$url . "/editMessageText?chat_id=$chatID&text=$caption&message_id=$message_id");
+        file_get_contents(self::$url . "/editMessageCaption?chat_id=$chatID&message_id=$message_id&caption=$caption");
 
     }
     public static function validation()

@@ -17,19 +17,23 @@ class Message
     public function __construct($update)
     {
         $this->update = json_decode($update, true);
-//        $this->record($this->update);
-//        die();
-        $this->autoAction($this->update['message']['text']);
+
+        $this->record($this->update);
+//        $this->autoAction($this->update['message']['text']);
+//        $this->autoAction($this->update['callback_query']['data']);
+        $this->autoAction($this->update);
 
     }
     public function autoAction($action): void
     {
-        if (!isset($this->actions[$action]))
-            AdRegister::handle($this->update['message']['from']['id'],
-                $this->update['message']['message_id'],
-                urlencode($this->update['message']['caption']."\n\n ".$this->addIdToCaption()."\n\n ".$this->addDateToCaption()."\n\n ".$this->addChannelToCaption()));
+        if ($action['message']['text'] == '/start')
+            Start::handle($this->update);
 
-        $this->actions[$action]::handle($this->update);
+        elseif ($action['callback_query']['data'] === 'cancelAd')
+            CancelAd::handle($this->update);
+
+        elseif($action['message']['text'] != '/start' && $action['callback_query']['data'] != 'cancelAd')
+            AdRegister::handle($this->update);
 
     }
 
@@ -37,28 +41,6 @@ class Message
     {
         file_put_contents('result.json',json_encode($value,true));
 
-    }
-
-    public function addIdToCaption(): string
-    {
-        return "🆔"."\t".'@'.$this->update['message']['from']['username'];
-    }
-    public function addDateToCaption(): string
-    {
-        return "📅"."\t".jdate('Y/m/d',$this->update['message']['date']);
-    }
-
-    public function addChannelToCaption(): string
-    {
-        return "🔊"."\t"."@heyvanyar_ads";
-    }
-    public function addStatusToCaption(): string
-    {
-        return "وضعیت"."\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t".'✅ واگذار شده';
-    }
-    public function status():string
-    {
-        return "             ".'واگذار شده';
     }
     public function __destruct()
     {

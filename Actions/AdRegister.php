@@ -7,14 +7,18 @@ class AdRegister implements ActionInterface
 {
     use Methods;
 
-    public static function handle(int $chat_id, $message_id ,$caption,$channel_id =-1001995214317,): void
+    public static function handle($update): void
     {
-        self::copy($channel_id,$chat_id,$message_id,$caption);
-        self::sendWithButton($chat_id,'اگهی شما در کانال قرار گرفت برای لغو اگهی دکمه زیر را بزنید',[
+        $message = self::copy(-1001995214317,
+            $update['message']['from']['id'],
+            $update['message']['message_id'],
+            urlencode($update['message']['caption']."\n\n ".self::addIdToCaption($update)."\n\n ".self::addDateToCaption($update)."\n\n ".self::addChannelToCaption()));
+
+        self::sendWithButton($update['message']['from']['id'],'اگهی شما در کانال قرار گرفت برای لغو اگهی دکمه زیر را بزنید',[
             'inline_keyboard' => [
                 [
                     [
-                    'text' => 'لغو آگهی ❌',
+                    'text' => json_decode($message, true)['result']['message_id'],
                     'callback_data' => 'cancelAd'
                     ]
                 ]
@@ -22,4 +26,17 @@ class AdRegister implements ActionInterface
         ]);
     }
 
+    public static function addIdToCaption($update): string
+    {
+        return "🆔"."\t".'@'.$update['message']['from']['username'];
+    }
+    public static function addDateToCaption($update): string
+    {
+        return "📅"."\t".jdate('Y/m/d',$update['message']['date']);
+    }
+
+    public static function addChannelToCaption(): string
+    {
+        return "🔊"."\t"."@heyvanyar_ads";
+    }
 }

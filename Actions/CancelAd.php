@@ -6,10 +6,9 @@ class cancelAd implements ActionInterface
 {
     use Methods;
 
-    public static function handle(int $chat_id, $message_id ,$caption='✅ واگذار شده'): void
+    public static function handle($update ,$caption='✅ واگذار شده'): void
     {
-//        file_put_contents('result.json',json_encode($message_id,true));
-//        die();
-        self::editCaption($chat_id,$message_id,$caption);
+        self::editCaption(-1001995214317,(int)$update['callback_query']['message']['reply_markup']['inline_keyboard'][0][0]['text'],$caption);
+        self::send($update['callback_query']['from']['id'],'پیام اگهی شما لغو شد❌');
     }
 }
