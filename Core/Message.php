@@ -6,6 +6,7 @@ require "Actions/AdRegister.php";
 class Message
 {
     protected array $update;
+
     private array $actions = [
         "/start" => 'Start',
     ];
@@ -20,7 +21,9 @@ class Message
     public function autoAction($action): void
     {
         if (!isset($this->actions[$action]))
-            AdRegister::handle($this->update['message']['from']['id'],$this->update['message']['message_id']);
+            AdRegister::handle($this->update['message']['from']['id'],
+                $this->update['message']['message_id'],
+                $this->update['message']['caption']." ".$this->defaultCaption());
 
         $this->actions[$action]::handle($this->update['message']['from']['id']);
 
@@ -32,6 +35,15 @@ class Message
 
     }
 
+    public function defaultCaption(): string
+    {
+        return "                     ".('@'.$this->update['message']['from']['username']);
+    }
+
+    public function status():string
+    {
+        return "             ".'واگذار شده';
+    }
     public function __destruct()
     {
         $this->record($this->update);
