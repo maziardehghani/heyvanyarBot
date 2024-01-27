@@ -3,6 +3,9 @@
 require "Actions/Start.php";
 require "Actions/AdRegister.php";
 require "Actions/CancelAd.php";
+
+
+
 require "jdate.php";
 
 class Message
@@ -18,7 +21,6 @@ class Message
     {
         $this->update = json_decode($update, true);
 
-        $this->record($this->update);
         $this->autoAction($this->update);
 
     }

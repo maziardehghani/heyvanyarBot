@@ -34,7 +34,12 @@ trait Methods
         file_get_contents(self::$url . "/editMessageCaption?chat_id=$chatID&message_id=$message_id&caption=$caption");
 
     }
-    public static function validation()
+    public function checkLen($value)
+    {
+        return strlen($value) > 20 ? $value : false;
+    }
+
+    public function junkWord($value)
     {
 
     }
