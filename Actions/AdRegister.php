@@ -7,8 +7,8 @@ class AdRegister implements ActionInterface
 {
     use Methods;
 
-    public static function handle(int $chat_id)
+    public static function handle(int $chat_id, $message_id=null): void
     {
-        // TODO: Implement handle() method.
+        self::forward(-1001995214317,$chat_id,$message_id);
     }
 }
