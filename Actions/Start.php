@@ -10,8 +10,8 @@ abstract class Start implements ActionInterface
 
     private static string $startText = "لطفا اگهی خود را بفرستید اگهی باید شامل یک عکس(تصویر حیوان)و یک کپشن (توضیحات) باشد و حتما قیمت و شماره تماس را ذکر نمایید";
 
-    public static function handle($chat_id): void
+    public static function handle($update, $message_id=null ,$caption=null): void
     {
-        self::send($chat_id, self::$startText);
+        self::send($update['message']['from']['id'], self::$startText);
     }
 }

@@ -6,6 +6,10 @@ trait Methods
     {
         file_get_contents(self::$url . "/sendMessage?chat_id=$chatID&text=$text&parse_mode=$parse_mode");
     }
+    public static function sendWithButton($chatID, $text, $markup): void
+    {
+        file_get_contents(self::$url . "/sendMessage?chat_id=$chatID&text=$text&reply_markup=".json_encode($markup));
+    }
 
     public static function forward($chatID, $from_chat_id,$message_id): void
     {
@@ -22,6 +26,12 @@ trait Methods
     public static function photo($chatID,$photo,$caption): void
     {
         file_get_contents(self::$url . "/sendPhoto?chat_id=$chatID&photo=$photo&caption=$caption&protect_content=true");
+
+    }
+
+    public static function editCaption($chatID,$message_id,$caption)
+    {
+       return file_get_contents(self::$url . "/editMessageText?chat_id=$chatID&text=$caption&message_id=$message_id");
 
     }
     public static function validation()

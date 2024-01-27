@@ -2,6 +2,7 @@
 
 require "Actions/Start.php";
 require "Actions/AdRegister.php";
+require "Actions/CancelAd.php";
 require "jdate.php";
 
 class Message
@@ -10,12 +11,14 @@ class Message
 
     private array $actions = [
         "/start" => 'Start',
+        'cancelAd' => 'CancelAd'
     ];
 
     public function __construct($update)
     {
         $this->update = json_decode($update, true);
-
+//        $this->record($this->update);
+//        die();
         $this->autoAction($this->update['message']['text']);
 
     }
@@ -24,27 +27,31 @@ class Message
         if (!isset($this->actions[$action]))
             AdRegister::handle($this->update['message']['from']['id'],
                 $this->update['message']['message_id'],
-                urlencode($this->update['message']['caption']."\n\n ".$this->addIdToCaption()."\n\n ".$this->addDateToCaption()."\n\n ".$this->addStatusToCaption()));
+                urlencode($this->update['message']['caption']."\n\n ".$this->addIdToCaption()."\n\n ".$this->addDateToCaption()."\n\n ".$this->addChannelToCaption()));
 
-        $this->actions[$action]::handle($this->update['message']['from']['id']);
+        $this->actions[$action]::handle($this->update);
 
     }
 
     public function record($value): void
     {
-        file_put_contents('result.json',json_encode($value));
+        file_put_contents('result.json',json_encode($value,true));
 
     }
 
     public function addIdToCaption(): string
     {
-        return "آیدی"."\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t".'@'.$this->update['message']['from']['username'];
+        return "🆔"."\t".'@'.$this->update['message']['from']['username'];
     }
     public function addDateToCaption(): string
     {
-        return "تاریخ"."\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t".jdate('Y/m/d',$this->update['message']['date']);
+        return "📅"."\t".jdate('Y/m/d',$this->update['message']['date']);
     }
 
+    public function addChannelToCaption(): string
+    {
+        return "🔊"."\t"."@heyvanyar_ads";
+    }
     public function addStatusToCaption(): string
     {
         return "وضعیت"."\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t".'✅ واگذار شده';
