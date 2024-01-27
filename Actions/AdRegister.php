@@ -10,6 +10,7 @@ class AdRegister implements ActionInterface
     public static function handle(int $chat_id, $message_id ,$caption,$channel_id =-1001995214317,): void
     {
         self::copy($channel_id,$chat_id,$message_id,$caption);
+        self::send($chat_id,'اگهی شما در کانال قرار گرفت برای لغو اگهی دکمه را زیر بزنید');
     }
 
 }

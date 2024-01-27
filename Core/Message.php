@@ -2,6 +2,7 @@
 
 require "Actions/Start.php";
 require "Actions/AdRegister.php";
+require "jdate.php";
 
 class Message
 {
@@ -23,7 +24,7 @@ class Message
         if (!isset($this->actions[$action]))
             AdRegister::handle($this->update['message']['from']['id'],
                 $this->update['message']['message_id'],
-                $this->update['message']['caption']." ".$this->defaultCaption());
+                urlencode($this->update['message']['caption']."\n\n ".$this->addIdToCaption()."\n\n ".$this->addDateToCaption()."\n\n ".$this->addStatusToCaption()));
 
         $this->actions[$action]::handle($this->update['message']['from']['id']);
 
@@ -35,11 +36,19 @@ class Message
 
     }
 
-    public function defaultCaption(): string
+    public function addIdToCaption(): string
     {
-        return "                     ".('@'.$this->update['message']['from']['username']);
+        return "آیدی"."\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t".'@'.$this->update['message']['from']['username'];
+    }
+    public function addDateToCaption(): string
+    {
+        return "تاریخ"."\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t".jdate('Y/m/d',$this->update['message']['date']);
     }
 
+    public function addStatusToCaption(): string
+    {
+        return "وضعیت"."\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t".'✅ واگذار شده';
+    }
     public function status():string
     {
         return "             ".'واگذار شده';
